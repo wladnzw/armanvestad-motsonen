@@ -12,7 +12,7 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(el => observer.observe(el));
 
 // Stagger child reveals
-document.querySelectorAll('.roles-grid, .faser-grid, .team-grid, .pust-letters').forEach(grid => {
+document.querySelectorAll('.roles-grid, .phases-grid, .team-grid, .pust-grid').forEach(grid => {
   const children = grid.children;
   Array.from(children).forEach((child, i) => {
     if (!child.classList.contains('reveal')) {
