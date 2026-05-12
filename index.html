@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MotSonen™ – Endring starter der folk tør å si hva de mener</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coal: #0e0d0b;
+    --ash: #1a1814;
+    --ember: #c8742a;
+    --ember-light: #e8924a;
+    --gold: #d4a853;
+    --cream: #f0ebe0;
+    --bone: #c9c2b0;
+    --mid: #6e6658;
+    --rule: rgba(200,116,42,0.25);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--coal);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+    border-bottom: 1px solid rgba(200,116,42,0.12);
+    backdrop-filter: blur(20px);
+    background: rgba(14,13,11,0.85);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--cream);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--ember); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--bone);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--ember); }
+
+  .nav-cta {
+    background: var(--ember);
+    color: var(--coal) !important;
+    padding: 0.55rem 1.4rem;
+    font-weight: 500 !important;
+    transition: background 0.3s !important;
+  }
+
+  .nav-cta:hover { background: var(--ember-light) !important; color: var(--coal) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 10rem 4rem 6rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 80% 20%, rgba(200,116,42,0.12) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 40% at 10% 90%, rgba(200,116,42,0.07) 0%, transparent 60%);
+    z-index: 0;
+  }
+
+  .hero-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 1.8rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 7vw, 7rem);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    max-width: 900px;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.35s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--ember);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--bone);
+    max-width: 520px;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.55s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 2.5rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--ember);
+    color: var(--coal);
+    padding: 0.85rem 2.2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--ember-light); transform: translateY(-2px); }
+
+  .btn-ghost {
+    color: var(--bone);
+    padding: 0.85rem 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: color 0.3s, border-color 0.3s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { color: var(--ember); border-color: var(--ember); }
+
+  .hero-rule {
+    position: absolute;
+    right: 4rem;
+    bottom: 6rem;
+    width: 1px;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--ember), transparent);
+    z-index: 1;
+    opacity: 0;
+    animation: fadeIn 1s 1s forwards;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-strip {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    background: var(--ash);
+  }
+
+  .marquee-inner {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--bone);
+    letter-spacing: 0.05em;
+  }
+
+  .marquee-inner span { color: var(--ember); margin: 0 1.5rem; }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .section-title em { font-style: italic; color: var(--ember); }
+
+  /* ── WHAT IS ── */
+  .what {
+    padding: 8rem 0;
+  }
+
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-top: 4rem;
+    align-items: start;
+  }
+
+  .what-left {}
+
+  .what-body {
+    color: var(--bone);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-top: 2rem;
+  }
+
+  .what-body p + p { margin-top: 1.2rem; }
+
+  .what-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    border-left: 1px solid var(--rule);
+    padding-left: 3rem;
+    margin-top: 1rem;
+  }
+
+  .quote-block {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .quote-block:first-child { padding-top: 0; }
+  .quote-block:last-child { border-bottom: none; }
+
+  .quote-block blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.4;
+    color: var(--cream);
+  }
+
+  .quote-attr {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 1rem;
+  }
+
+  /* ── TEMPERATURE ── */
+  .temperature {
+    background: var(--ash);
+    padding: 8rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .temp-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .temp-visual {
+    position: relative;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .temp-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 1px solid var(--ember);
+    position: relative;
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  .temp-circle::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,116,42,0.4);
+    animation: pulse 4s ease-in-out infinite reverse;
+  }
+
+  .temp-circle::after {
+    content: 'T°';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-style: italic;
+    color: var(--ember);
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.7; }
+  }
+
+  .temp-content { }
+
+  .temp-content .section-title { margin-top: 1rem; }
+
+  .temp-body {
+    color: var(--bone);
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .temp-body p + p { margin-top: 1rem; }
+
+  .temp-triad {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .triad-item {
+    flex: 1;
+    padding: 1.5rem;
+    border: 1px solid var(--rule);
+    background: rgba(200,116,42,0.04);
+  }
+
+  .triad-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-style: italic;
+    color: var(--ember);
+    line-height: 1;
+  }
+
+  .triad-label {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-top: 0.6rem;
+    font-weight: 500;
+  }
+
+  .triad-desc {
+    font-size: 0.82rem;
+    color: var(--mid);
+    margin-top: 0.4rem;
+    line-height: 1.5;
+  }
+
+  /* ── ROLLER ── */
+  .roller {
+    padding: 8rem 0;
+  }
+
+  .roller-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    gap: 3rem;
+  }
+
+  .roller-intro {
+    max-width: 480px;
+    color: var(--bone);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .roles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .role-card {
+    background: var(--coal);
+    padding: 2.5rem;
+    transition: background 0.4s;
+    cursor: default;
+  }
+
+  .role-card:hover {
+    background: var(--ash);
+  }
+
+  .role-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ember);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .role-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+
+  .role-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 1.5rem;
+  }
+
+  .role-desc {
+    color: var(--bone);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .role-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+  }
+
+  .role-bullets li {
+    font-size: 0.82rem;
+    color: var(--mid);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .role-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--ember);
+  }
+
+  .role-warning {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .role-w-item {
+    background: rgba(200,116,42,0.05);
+    padding: 1.2rem 1.5rem;
+    font-size: 0.82rem;
+    color: var(--bone);
+  }
+
+  .role-w-item strong {
+    color: var(--ember);
+    font-weight: 500;
+  }
+
+  /* ── FASER ── */
+  .faser {
+    background: var(--ash);
+    padding: 8rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .faser-head { margin-bottom: 4rem; }
+
+  .faser-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .fase-card {
+    background: var(--ash);
+    padding: 2rem;
+    transition: background 0.3s;
+  }
+
+  .fase-card:hover { background: #1f1d19; }
+
+  .fase-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-style: italic;
+    color: rgba(200,116,42,0.3);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .fase-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.8rem;
+  }
+
+  .fase-desc {
+    font-size: 0.85rem;
+    color: var(--bone);
+    line-height: 1.6;
+  }
+
+  /* ── PUST ── */
+  .pust {
+    padding: 8rem 0;
+  }
+
+  .pust-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .pust-letters {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .pust-row {
+    display: flex;
+    background: var(--coal);
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .pust-row:hover { background: var(--ash); }
+
+  .pust-letter-box {
+    width: 80px;
+    min-width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(200,116,42,0.08);
+    border-right: 1px solid var(--rule);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-style: italic;
+    color: var(--ember);
+  }
+
+  .pust-text {
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pust-key {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 0.3rem;
+  }
+
+  .pust-val {
+    font-size: 0.9rem;
+    color: var(--bone);
+    line-height: 1.5;
+  }
+
+  .pust-right {}
+
+  .pust-right .section-label { margin-bottom: 1rem; }
+  .pust-right .section-title { margin-bottom: 1.5rem; }
+
+  .pust-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--bone);
+    line-height: 1.5;
+    border-left: 2px solid var(--ember);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .pust-body {
+    color: var(--bone);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  /* ── SKAM SECTION ── */
+  .skam {
+    background: linear-gradient(135deg, #1a1510 0%, var(--ash) 100%);
+    padding: 6rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .skam-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .skam-inner .section-label { margin-bottom: 1rem; }
+
+  .skam-inner .section-title { margin-bottom: 2rem; }
+
+  .skam-body {
+    color: var(--bone);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .skam-body p + p { margin-top: 1rem; }
+
+  .skam-pull {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    font-style: italic;
+    color: var(--cream);
+    margin: 3rem 0;
+    line-height: 1.4;
+  }
+
+  .skam-pull em { color: var(--ember); }
+
+  /* ── TEAM ── */
+  .team {
+    padding: 8rem 0;
+  }
+
+  .team-head { margin-bottom: 4rem; }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .team-card {
+    background: var(--coal);
+    padding: 3rem;
+    transition: background 0.3s;
+  }
+
+  .team-card:hover { background: var(--ash); }
+
+  .team-role {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 0.6rem;
+  }
+
+  .team-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .team-bio {
+    color: var(--bone);
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .team-bio p + p { margin-top: 1rem; }
+
+  /* ── FOR HVEM ── */
+  .for-hvem {
+    background: var(--ash);
+    padding: 8rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .for-hvem-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .hvem-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .hvem-item {
+    background: var(--ash);
+    padding: 1.2rem 1.5rem;
+    font-size: 0.9rem;
+    color: var(--bone);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: background 0.25s;
+  }
+
+  .hvem-item:hover { background: #1f1d19; }
+
+  .hvem-item::before {
+    content: '—';
+    color: var(--ember);
+    flex-shrink: 0;
+  }
+
+  .hvem-right {
+    padding-top: 0.5rem;
+  }
+
+  .hvem-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--cream);
+    border-left: 2px solid var(--ember);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .hvem-note {
+    font-size: 0.82rem;
+    color: var(--mid);
+    line-height: 1.6;
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--rule);
+  }
+
+  /* ── CTA ── */
+  .cta {
+    padding: 10rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,116,42,0.1) 0%, transparent 70%);
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta .section-label { margin-bottom: 1.5rem; }
+
+  .cta .section-title {
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-body {
+    color: var(--bone);
+    max-width: 480px;
+    margin: 0 auto 3rem;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .cta-email {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ember);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.2rem;
+    transition: color 0.3s, border-color 0.3s;
+    display: inline-block;
+    margin-top: 1.5rem;
+  }
+
+  .cta-email:hover { color: var(--ember-light); border-color: var(--ember); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 2.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--bone);
+  }
+
+  .footer-logo span { color: var(--ember); }
+
+  .footer-note {
+    font-size: 0.75rem;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 8rem 1.5rem 5rem; }
+    .container { padding: 0 1.5rem; }
+    .what-grid, .temp-inner, .pust-inner, .for-hvem-inner, .team-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .roles-grid, .faser-grid { grid-template-columns: 1fr; }
+    .role-warning { grid-template-columns: 1fr; }
+    .temp-triad { flex-direction: column; }
+    .hero h1 { font-size: 2.8rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .what-right { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Mot<span>Sonen</span>™</a>
+  <ul class="nav-links">
+    <li><a href="#metode">Metoden</a></li>
+    <li><a href="#roller">Rollene</a></li>
+    <li><a href="#faser">Faser</a></li>
+    <li><a href="#team">Om oss</a></li>
+    <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-tag">Metode og foredrag · MotSonen™</div>
+  <h1>Endring starter der folk <em>tør</em> å si hva de mener.</h1>
+  <p class="hero-sub">MotSonen™ er metoden og stedet der temperaturen er riktig – der ledere våger å gå foran, og der endring ikke bare skjer på papiret.</p>
+  <div class="hero-actions">
+    <a href="#kontakt" class="btn-primary">Ta kontakt</a>
+    <a href="#metode" class="btn-ghost">Les om metoden</a>
+  </div>
+  <div class="hero-rule"></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    Temperatur <span>·</span> Ærlighet <span>·</span> Struktur <span>·</span> Mot <span>·</span> MotSonen™ <span>·</span> Brave Temperature™ <span>·</span> Temperatur <span>·</span> Ærlighet <span>·</span> Struktur <span>·</span> Mot <span>·</span> MotSonen™ <span>·</span> Brave Temperature™ <span>·</span> Temperatur <span>·</span> Ærlighet <span>·</span> Struktur <span>·</span> Mot <span>·</span> MotSonen™ <span>·</span> Brave Temperature™ <span>·</span>
+  </div>
+</div>
+
+<!-- WHAT IS -->
+<section class="what" id="metode">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Hva er MotSonen™</div>
+    </div>
+    <div class="what-grid">
+      <div class="what-left reveal">
+        <h2 class="section-title">Et sted. En metode. <em>Et klima.</em></h2>
+        <div class="what-body">
+          <p>MotSonen™ er metoden vi bruker når en organisasjon trenger å komme videre – gjennom omstilling, sammenslåing, tillitsbrudd eller kulturskifte.</p>
+          <p>Og det er stedet organisasjonen befinner seg i når metoden har virket: et klima der folk faktisk sier det de mener, der ledere våger å gå foran, og der endring ikke bare skjer på papiret.</p>
+          <p>Ordet «mot» bærer to betydninger på norsk – retning og styrke. Begge er bevisste. Vi beveger oss <em>mot</em> noe, og vi gjør det med <em>mot</em>.</p>
+          <p style="margin-top: 1.5rem; font-size: 0.82rem; color: var(--mid); letter-spacing: 0.05em;">For organisasjoner med 200+ ansatte.</p>
+        </div>
+      </div>
+      <div class="what-right reveal">
+        <div class="quote-block">
+          <blockquote>«Organisasjoner mislykkes sjelden fordi strategien er feil. De mislykkes fordi folk ikke tør å si hva de egentlig mener – før retningen er satt.»</blockquote>
+          <div class="quote-attr">— Arman Vestad, grunnlegger</div>
+        </div>
+        <div class="quote-block">
+          <blockquote>«Når temperaturen er riktig, tør folk å ta risiko i samtalen. De opplever at de sitter i samme båt.»</blockquote>
+          <div class="quote-attr">— MotSonen™ metodedokument</div>
+        </div>
+        <div class="quote-block">
+          <blockquote>«MotSonen er ikke der du starter. Det er dit du kommer når temperaturen er riktig.»</blockquote>
+          <div class="quote-attr">— MotSonen™</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEMPERATURE -->
+<section class="temperature">
+  <div class="container">
+    <div class="temp-inner">
+      <div class="temp-visual reveal">
+        <div class="temp-circle"></div>
+      </div>
+      <div class="temp-content reveal">
+        <div class="section-label">Kjernen i metoden</div>
+        <h2 class="section-title">Den som har mest makt, har mest ansvar for <em>temperaturen.</em></h2>
+        <div class="temp-body">
+          <p>Det finnes en temperatur i et rom. Når temperaturen er feil, svarer folk riktig – ikke ærlig. Kroppene trekker seg litt tilbake.</p>
+          <p>Når temperaturen er riktig, faller skuldrene. Du våger å si det du egentlig mener.</p>
+        </div>
+        <div class="temp-triad">
+          <div class="triad-item">
+            <div class="triad-num">I</div>
+            <div class="triad-label">Temperatur</div>
+            <div class="triad-desc">Skapes først. Uten den – ingen ekte åpning.</div>
+          </div>
+          <div class="triad-item">
+            <div class="triad-num">II</div>
+            <div class="triad-label">Ærlighet</div>
+            <div class="triad-desc">Følger naturlig når rommet er trygt nok.</div>
+          </div>
+          <div class="triad-item">
+            <div class="triad-num">III</div>
+            <div class="triad-label">Struktur</div>
+            <div class="triad-desc">Gjør endringen varig og levende i organisasjonen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLLER -->
+<section class="roller" id="roller">
+  <div class="container">
+    <div class="roller-head reveal">
+      <div>
+        <div class="section-label">De tre rollene</div>
+        <h2 class="section-title">Arketyper for <em>modig lederskap.</em></h2>
+      </div>
+      <p class="roller-intro">Kjell Bjørn, Mette og Kari er ikke bare historier fra ett liv. De er roller enhver organisasjon trenger – og som ledere kan kjenne seg igjen i og trene på.</p>
+    </div>
+    <div class="roles-grid reveal">
+      <div class="role-card">
+        <div class="role-letter">K</div>
+        <div class="role-name">Kjell Bjørn</div>
+        <div class="role-tag">Den som ser bak rollen</div>
+        <p class="role-desc">Setter seg ned – bokstavelig og mentalt. Observerer før han vurderer. Skiller mellom handling og menneske. Skaper trygghet i øyeblikk der folk er mest sårbare.</p>
+        <ul class="role-bullets">
+          <li>Stiller åpne spørsmål: «Hva tenker du selv?»</li>
+          <li>Snakker med folk – ikke til dem</li>
+          <li>Prioriterer relasjon før løsning</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-letter">M</div>
+        <div class="role-name">Mette</div>
+        <div class="role-tag">Den som gir tillit før den er fortjent</div>
+        <p class="role-desc">Viser tillit i praksis – ikke bare i ord. Ser potensial der andre ser problemer. Tør å ta sosial risiko. Flytter mennesker fra forsvar til utvikling.</p>
+        <ul class="role-bullets">
+          <li>Gir ansvar før kontroll</li>
+          <li>Møter folk uten symboler på hierarki</li>
+          <li>Sier høyt hva hun tror de kan få til</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-letter">K</div>
+        <div class="role-name">Kari</div>
+        <div class="role-tag">Den som tør å satse når det gjelder</div>
+        <p class="role-desc">Ser muligheter der andre ser risiko. Tør å stå i beslutninger som ikke er «trygge». Lar ikke systemets fordommer styre. Skaper reelle muligheter.</p>
+        <ul class="role-bullets">
+          <li>Beslutter basert på potensial, ikke bare historikk</li>
+          <li>Åpner dører fremfor å lukke dem</li>
+          <li>Står i valget – også når det blåser</li>
+        </ul>
+      </div>
+    </div>
+    <div class="role-warning reveal">
+      <div class="role-w-item">Uten <strong>Kjell Bjørn</strong>: ingen ærlighet</div>
+      <div class="role-w-item">Uten <strong>Mette</strong>: ingen bevegelse</div>
+      <div class="role-w-item">Uten <strong>Kari</strong>: ingen konsekvens</div>
+    </div>
+  </div>
+</section>
+
+<!-- FASER -->
+<section class="faser" id="faser">
+  <div class="container">
+    <div class="faser-head reveal">
+      <div class="section-label">Leveransemodellen</div>
+      <h2 class="section-title">Seks faser. <em>Én retning.</em></h2>
+    </div>
+    <div class="faser-grid reveal">
+      <div class="fase-card">
+        <div class="fase-num">01</div>
+        <div class="fase-title">Strategisk forankring</div>
+        <p class="fase-desc">Møte med toppledelsen. Ikke for å selge – for å lytte. Hva er vanskelig å snakke om internt? Hva står på spill?</p>
+      </div>
+      <div class="fase-card">
+        <div class="fase-num">02</div>
+        <div class="fase-title">Ledergruppen: Tøff som naken</div>
+        <p class="fase-desc">Lederne må gå først. Alltid. Foredraget leveres til ledergruppen med fokus på rollemodellperspektivet.</p>
+      </div>
+      <div class="fase-card">
+        <div class="fase-num">03</div>
+        <div class="fase-title">Lederworkshop</div>
+        <p class="fase-desc">Lederne trener på det de skal stå i. Felles språk for åpenhet. Trening i å møte ansatte med nysgjerrighet fremfor kontroll.</p>
+      </div>
+      <div class="fase-card">
+        <div class="fase-num">04</div>
+        <div class="fase-title">Hele organisasjonen: Tøff som naken</div>
+        <p class="fase-desc">Foredraget leveres til alle ansatte. Sårbarhet normaliseres. Skuldrene senkes. Rommet gjøres trygt nok til at det som ellers ikke blir sagt, kan sies.</p>
+      </div>
+      <div class="fase-card">
+        <div class="fase-num">05</div>
+        <div class="fase-title">Workshop</div>
+        <p class="fase-desc">Broen mellom temperatur og struktur. Skam-øvelsen. Strukturert dialog. Felles språk. Vi-følelsen. Workshopdelen er ikke valgfri.</p>
+      </div>
+      <div class="fase-card">
+        <div class="fase-num">06</div>
+        <div class="fase-title">Struktur og implementering</div>
+        <p class="fase-desc">Åpenhet oversettes til handling. Integrering i lederstruktur. Implementering i praksis. Oppfølging over tid.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKAM-ØVELSEN -->
+<section class="skam">
+  <div class="container">
+    <div class="skam-inner reveal">
+      <div class="section-label">Workshopøvelsen</div>
+      <h2 class="section-title">Skam-øvelsen</h2>
+      <p class="skam-pull">«Effekten er ikke kunnskap – det er forståelse. Deltakerne forstår, ikke bare intellektuelt men <em>i kroppen</em>, hva det koster å be om hjelp.»</p>
+      <div class="skam-body">
+        <p>Deltakerne blir bedt om å tenke på noe de skammer seg over. De trenger ikke dele det med noen. Det er selve tankeprosessen som er øvelsen.</p>
+        <p>Midt i øvelsen avbrytes den – med beskjed om at to personer vil bli trukket ut til å fortelle på scenen. En pause. Deretter: øvelsen er over. Ingen skal fortelle noe som helst.</p>
+        <p>Det som utforskes er opplevelsen i rommet: Hva tenkte du da du trodde du måtte dele? Hva skjedde i kroppen? Stolte du nok på personen ved siden av deg?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUST -->
+<section class="pust">
+  <div class="container">
+    <div class="pust-inner">
+      <div class="pust-right reveal">
+        <div class="section-label">Rammeverk</div>
+        <h2 class="section-title"><em>PUST</em></h2>
+        <div class="pust-note">«PUST er ikke en samtaleteknikk. Det er en holdning i møte med mennesker.»</div>
+        <p class="pust-body">Et verktøy for samtaler der noe faktisk står på spill – der makt, skam og konsekvenser er til stede. For de øyeblikkene der det koster noe å snakke.</p>
+      </div>
+      <div class="pust-letters reveal">
+        <div class="pust-row">
+          <div class="pust-letter-box">P</div>
+          <div class="pust-text">
+            <div class="pust-key">På spill</div>
+            <div class="pust-val">Hva risikerer den andre i denne samtalen?</div>
+          </div>
+        </div>
+        <div class="pust-row">
+          <div class="pust-letter-box">U</div>
+          <div class="pust-text">
+            <div class="pust-key">Ubeskyttet</div>
+            <div class="pust-val">Ta av masken. Ikke gjemme seg bak paragrafer, titler eller fremmedord.</div>
+          </div>
+        </div>
+        <div class="pust-row">
+          <div class="pust-letter-box">S</div>
+          <div class="pust-text">
+            <div class="pust-key">Se</div>
+            <div class="pust-val">Vær fullt til stede. Tål pauser. La den andre bruke tid.</div>
+          </div>
+        </div>
+        <div class="pust-row">
+          <div class="pust-letter-box">T</div>
+          <div class="pust-text">
+            <div class="pust-key">Toleransevinduet</div>
+            <div class="pust-val">Bevar roen. Gå ikke i forsvar. Den med mest makt har størst ansvar for klimaet.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="container">
+    <div class="team-head reveal">
+      <div class="section-label">Menneskene bak metoden</div>
+      <h2 class="section-title">Ikke et konsept. <em>En erfaring.</em></h2>
+    </div>
+    <div class="team-grid reveal">
+      <div class="team-card">
+        <div class="team-role">Grunnlegger · MotSonen™</div>
+        <div class="team-name">Arman Vestad</div>
+        <div class="team-bio">
+          <p>Arman Vestad har vært på begge sider av bordet. Han har sittet i stolen foran NAV-veilederen, sosialkontormedarbeideren og dommeren. Han vet hva det vil si å bære skam inn i et rom – og hva det koster å be om hjelp fra et system du ikke stoler på.</p>
+          <p>I dag holder han foredrag for noen av Norges ledende virksomheter. Ikke fordi han har glemt hvor han kom fra – men fordi han aldri har gjort det.</p>
+          <p>Det som skilte de menneskene som faktisk nådde inn til ham fra alle andre, var ikke kompetansen deres. Det var motet. Den erfaringen er ikke bare en historie. Det er grunnmuren i MotSonen™.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-role">Partner · Prosess- og strukturleder</div>
+        <div class="team-name">François Sibbald</div>
+        <div class="team-bio">
+          <p>François Sibbald er en av Europas mest erfarne edutainere, med over 30 år på scenen og mer enn 120 oppdrag i året. Han har ledet konferanser, talkshows og lederutviklingsprogrammer i inn- og utland.</p>
+          <p>I MotSonen™ er François prosess- og strukturleder. Han tar i bruk det Arman har skapt – temperaturen, åpenheten, språket – og oversetter det til handling som lever videre i organisasjonen.</p>
+          <p>Det han bringer inn er ikke et nytt konsept. Det er presisjon, erfaring og en unik evne til å lese et rom og hjelpe mennesker videre.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR HVEM -->
+<section class="for-hvem">
+  <div class="container">
+    <div class="for-hvem-inner">
+      <div class="reveal">
+        <div class="section-label">Hvem dette passer for</div>
+        <h2 class="section-title">Organisasjoner <em>i bevegelse.</em></h2>
+        <div class="hvem-list">
+          <div class="hvem-item">Fusjon eller sammenslåing</div>
+          <div class="hvem-item">Større omorganisering</div>
+          <div class="hvem-item">Tillitsbrudd eller konflikter</div>
+          <div class="hvem-item">Rask vekst med kulturtap</div>
+          <div class="hvem-item">Strategisk skifte</div>
+          <div class="hvem-item">Medarbeiderundersøkelser som ikke gir hele bildet</div>
+        </div>
+        <div class="hvem-note">Dette er ikke et motivasjonsforedrag. Det er et verktøy for organisasjoner i bevegelse – med mer enn 200 ansatte.</div>
+      </div>
+      <div class="hvem-right reveal">
+        <div class="section-label">Effekt – seks måneder etter</div>
+        <div class="hvem-quote">«Dette kunne vi ikke klart oss uten. Nå har vi et språk for det som er vanskelig. Folk tør å si fra før det blir for sent. Endringene våre lever ikke bare i planene – de lever i oss.»</div>
+        <p style="font-size: 0.82rem; color: var(--mid); margin-top: 1rem; line-height: 1.6;">MotSonen™ er bygget for å skalere – men det starter med å levere det riktig. Pilotleveranser pågår. Ta kontakt for å lære mer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="kontakt">
+  <div class="cta-bg"></div>
+  <div class="container">
+    <div class="cta-inner reveal">
+      <div class="section-label">Ta kontakt</div>
+      <h2 class="section-title">Klar til å skape den <em>riktige temperaturen</em>?</h2>
+      <p class="cta-body">La oss starte med en samtale. Vi lytter – ikke for å selge, men for å forstå hva som faktisk trykker hos dere.</p>
+      <a href="#kontakt" class="btn-primary">Book et møte</a>
+      <br>
+      <a href="mailto:arman@armanv.no" class="cta-email">arman@armanv.no</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Mot<span>Sonen</span>™</div>
+  <div class="footer-note">© 2025 MotSonen™ · Alle rettigheter forbeholdt</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Stagger child reveals
+  document.querySelectorAll('.roles-grid, .faser-grid, .team-grid, .pust-letters').forEach(grid => {
+    const children = grid.children;
+    Array.from(children).forEach((child, i) => {
+      if (!child.classList.contains('reveal')) {
+        child.style.transitionDelay = `${i * 0.08}s`;
+      }
+    });
+  });
+</script>
+</body>
+</html>
