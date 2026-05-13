@@ -1190,25 +1190,35 @@
     .nav-right .nav-cta { display: none; }
     .nav-mobile-cta { display: block; }
 
+    nav.nav-open {
+      background: #0e0d0b;
+      border-bottom-color: rgba(200,116,42,0.12);
+    }
+
+    /* logo and close button must render above the nav-links panel */
+    nav.nav-open .nav-logo { position: relative; z-index: 100; }
+    nav.nav-open .nav-right { position: relative; z-index: 100; }
+
     .nav-links {
       display: none;
       position: fixed;
-      top: 57px;
+      top: 0;
       left: 0;
       right: 0;
-      background: rgba(14,13,11,0.97);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--rule);
-      padding: 1rem 1.5rem 1.5rem;
+      height: 100vh;
+      background: #0e0d0b;
+      padding: 4.5rem 1.5rem 1.5rem;
       flex-direction: column;
       gap: 0;
       z-index: 99;
+      overflow-y: auto;
     }
 
     .nav-links.open { display: flex; }
     .nav-links li { border-bottom: 1px solid rgba(200,116,42,0.1); }
     .nav-links li:last-child { border-bottom: none; }
     .nav-links a { padding: 0.9rem 0; display: block; font-size: 0.85rem; }
+    .nav-mobile-cta { margin-top: auto; padding-bottom: env(safe-area-inset-bottom, 0); }
     .nav-mobile-cta .nav-cta {
       display: block;
       width: 100%;
