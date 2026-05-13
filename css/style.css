@@ -1229,6 +1229,7 @@
 
     .hero { padding: 0; }
     .hero-content { padding: 5rem 1.5rem 2rem; }
+    .hero .marquee-strip { padding: 0.625rem 0; }
     .container { padding: 0 1.5rem; }
     .what-grid, .temp-inner, .pust-inner, .for-hvem-inner { grid-template-columns: 1fr; gap: 3rem; }
     .team-grid { grid-template-columns: 1fr; gap: 1px; }
