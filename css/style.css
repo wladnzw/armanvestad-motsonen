@@ -232,6 +232,8 @@
     animation: fadeUp 0.9s 0.55s forwards;
   }
 
+  .hero-sub p + p { margin-top: 1rem; }
+
   .hero-actions {
     display: flex;
     gap: 1.2rem;
@@ -408,6 +410,8 @@
     line-height: 1.4;
     color: var(--cream);
   }
+
+  .quote-block--feature blockquote { font-size: 1.7rem; }
 
   .quote-attr {
     font-size: 0.75rem;
@@ -810,6 +814,30 @@
 
   .skam-pull em { color: var(--ember); }
 
+  /* ── WHY ── */
+  .why {
+    padding: 7rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .why-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .why-inner .section-label { margin-bottom: 1rem; }
+  .why-inner .section-title { margin-bottom: 2rem; }
+
+  .why-body {
+    color: var(--bone);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .why-body p + p { margin-top: 1.2rem; }
+
   /* ── TEAM ── */
   .team {
     padding: 8rem 0;
@@ -966,11 +994,25 @@
     border: 1px solid var(--rule);
   }
 
-  .hvem-pilot-note {
-    font-size: 0.82rem;
-    color: var(--mid);
-    margin-top: 1rem;
-    line-height: 1.6;
+  .hvem-closing {
+    margin-top: 2rem;
+  }
+
+  .hvem-closing p {
+    color: var(--bone);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .hvem-closing p + p { margin-top: 1rem; }
+
+  .hvem-closing p:last-child {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.4;
+    margin-top: 1.2rem;
   }
 
   /* ── CTA ── */
